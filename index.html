@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>World of Sports Fun | AI Voice Assistant — Ace</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --red:#e63c2f;
+      --navy:#1a3a6b;
+      --gold:#f5a623;
+      --bg:#0a0f1e;
+      --surface:#111827;
+      --surface2:#1a2540;
+      --border:rgba(255,255,255,0.08);
+      --text:#f0f4ff;
+      --muted:#8a9bc4;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6}
+    a{color:inherit;text-decoration:none}
+    ::-webkit-scrollbar{width:5px}
+    ::-webkit-scrollbar-thumb{background:var(--red);border-radius:3px}
+
+    /* ── NAV ── */
+    nav{
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:16px 5%;
+      background:rgba(10,15,30,0.92);
+      backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--border);
+    }
+    .nav-logo{display:flex;align-items:center;gap:10px}
+    .nav-logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--red),var(--gold));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+    .nav-logo-text{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;color:var(--text)}
+    .nav-logo-text span{color:var(--gold)}
+    .nav-links{display:flex;align-items:center;gap:28px}
+    .nav-links a{font-size:.9rem;font-weight:500;color:var(--muted);transition:color .2s}
+    .nav-links a:hover{color:var(--text)}
+    .nav-call{
+      display:flex;align-items:center;gap:8px;
+      padding:9px 20px;
+      background:var(--red);
+      color:white;font-weight:700;font-size:.9rem;
+      border-radius:8px;transition:all .2s;
+    }
+    .nav-call:hover{background:#c0392b;transform:translateY(-1px)}
+
+    /* ── HERO ── */
+    #hero{
+      min-height:100vh;
+      display:flex;align-items:center;
+      padding:100px 5% 60px;
+      position:relative;overflow:hidden;
+    }
+    .hero-bg{
+      position:absolute;inset:0;z-index:0;
+      background:
+        radial-gradient(ellipse 70% 60% at 15% 50%,rgba(230,60,47,.1) 0%,transparent 60%),
+        radial-gradient(ellipse 60% 50% at 85% 40%,rgba(26,58,107,.25) 0%,transparent 60%),
+        radial-gradient(ellipse 40% 40% at 50% 100%,rgba(245,166,35,.06) 0%,transparent 50%);
+    }
+    .hero-bg::before{
+      content:'';position:absolute;inset:0;
+      background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+      background-size:50px 50px;
+    }
+    .hero-inner{
+      position:relative;z-index:1;
+      display:grid;grid-template-columns:1fr 1fr;
+      gap:60px;align-items:center;
+      max-width:1200px;width:100%;margin:0 auto;
+    }
+    .hero-tag{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:6px 16px;
+      background:rgba(230,60,47,.12);
+      border:1px solid rgba(230,60,47,.3);
+      border-radius:50px;
+      font-size:.8rem;font-weight:700;color:var(--red);
+      margin-bottom:20px;width:fit-content;
+    }
+    .hero-tag .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px var(--gold);animation:blink 2s infinite}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+    .hero-title{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:clamp(2.4rem,5vw,4rem);
+      font-weight:900;line-height:1.05;
+      letter-spacing:-1.5px;margin-bottom:20px;
+    }
+    .hero-title .accent{
+      background:linear-gradient(135deg,var(--red),var(--gold));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .hero-subtitle{color:var(--muted);font-size:1.1rem;max-width:520px;margin-bottom:36px;line-height:1.75}
+    .hero-subtitle strong{color:var(--text)}
+    .hero-btns{display:flex;gap:14px;flex-wrap:wrap}
+    .btn-red{
+      padding:14px 30px;
+      background:var(--red);color:white;
+      font-weight:700;font-size:1rem;border-radius:10px;
+      transition:all .3s;display:flex;align-items:center;gap:8px;
+    }
+    .btn-red:hover{background:#c0392b;transform:translateY(-3px);box-shadow:0 12px 30px rgba(230,60,47,.35)}
+    .btn-outline{
+      padding:14px 30px;
+      background:transparent;color:var(--text);
+      font-weight:600;font-size:1rem;border-radius:10px;
+      border:2px solid var(--border);transition:all .3s;
+    }
+    .btn-outline:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-3px)}
+
+    /* Hero visual */
+    .hero-visual{position:relative}
+    .hero-card{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:20px;overflow:hidden;
+      box-shadow:0 30px 80px rgba(0,0,0,.5);
+    }
+    .hero-card-header{
+      background:linear-gradient(135deg,var(--navy),#0f2050);
+      padding:20px 24px;
+      display:flex;align-items:center;gap:12px;
+      border-bottom:1px solid var(--border);
+    }
+    .ace-avatar{
+      width:48px;height:48px;border-radius:50%;
+      background:linear-gradient(135deg,var(--red),var(--gold));
+      display:flex;align-items:center;justify-content:center;
+      font-size:1.4rem;flex-shrink:0;
+    }
+    .ace-info .ace-name{font-weight:700;font-size:1rem}
+    .ace-info .ace-status{font-size:.8rem;color:var(--gold);display:flex;align-items:center;gap:5px}
+    .ace-info .ace-status::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 6px var(--gold)}
+    .hero-card-body{padding:24px}
+    .chat-bubble{
+      padding:12px 16px;border-radius:12px;
+      font-size:.9rem;line-height:1.6;margin-bottom:12px;max-width:88%;
+    }
+    .chat-bubble.ace{background:rgba(26,58,107,.4);border:1px solid rgba(99,149,237,.15);border-radius:12px 12px 12px 2px}
+    .chat-bubble.user{background:rgba(230,60,47,.15);border:1px solid rgba(230,60,47,.2);border-radius:12px 12px 2px 12px;margin-left:auto}
+    .chat-bubble .bubble-name{font-size:.75rem;font-weight:700;color:var(--gold);margin-bottom:4px}
+    .typing{display:flex;align-items:center;gap:5px;padding:14px 16px;background:rgba(26,58,107,.3);border-radius:12px 12px 12px 2px;width:fit-content}
+    .typing span{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:typingDot 1.2s infinite}
+    .typing span:nth-child(2){animation-delay:.2s}
+    .typing span:nth-child(3){animation-delay:.4s}
+    @keyframes typingDot{0%,80%,100%{transform:scale(.8);opacity:.5}40%{transform:scale(1);opacity:1}}
+
+    /* Floating badges */
+    .badge-float{
+      position:absolute;
+      background:var(--surface2);border:1px solid var(--border);
+      border-radius:10px;padding:8px 14px;
+      font-size:.75rem;font-weight:600;
+      white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.4);
+    }
+    .badge-float.b1{top:-16px;left:-20px;color:var(--gold);border-color:rgba(245,166,35,.3)}
+    .badge-float.b2{bottom:-16px;right:-20px;color:#68d391;border-color:rgba(104,211,145,.3)}
+
+    /* ── ACTIVITIES ── */
+    #activities{padding:100px 5%;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+    .activities-inner{max-width:1200px;margin:0 auto}
+    .section-label{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--red);margin-bottom:12px}
+    .section-label::before{content:'';width:20px;height:2px;background:var(--red);border-radius:1px}
+    .section-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;margin-bottom:14px;letter-spacing:-.5px;line-height:1.15}
+    .section-title span{background:linear-gradient(135deg,var(--red),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .section-desc{color:var(--muted);font-size:1rem;max-width:560px;line-height:1.7;margin-bottom:50px}
+    .activities-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+    .activity-card{
+      background:var(--bg);border:1px solid var(--border);
+      border-radius:14px;padding:24px 20px;text-align:center;
+      transition:all .3s;cursor:default;
+    }
+    .activity-card:hover{border-color:var(--red);transform:translateY(-6px);box-shadow:0 12px 30px rgba(230,60,47,.15)}
+    .activity-icon{font-size:2.5rem;margin-bottom:12px;display:block}
+    .activity-name{font-weight:700;font-size:.95rem;margin-bottom:6px}
+    .activity-desc{color:var(--muted);font-size:.82rem;line-height:1.5}
+
+    /* ── HOW ACE HELPS ── */
+    #ace{padding:100px 5%}
+    .ace-inner{max-width:1200px;margin:0 auto}
+    .ace-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+    .ace-features{display:flex;flex-direction:column;gap:20px}
+    .ace-feature{
+      display:flex;align-items:flex-start;gap:16px;
+      padding:22px;background:var(--surface);
+      border:1px solid var(--border);border-radius:14px;
+      transition:all .3s;
+    }
+    .ace-feature:hover{border-color:rgba(230,60,47,.3);transform:translateX(6px)}
+    .ace-feature-icon{
+      width:44px;height:44px;border-radius:10px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:1.3rem;flex-shrink:0;
+    }
+    .ace-feature h3{font-size:1rem;font-weight:700;margin-bottom:5px}
+    .ace-feature p{color:var(--muted);font-size:.88rem;line-height:1.6}
+    /* Stats */
+    .ace-stats{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .ace-stat{
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:14px;padding:28px;text-align:center;
+    }
+    .ace-stat-num{
+      font-family:'Space Grotesk',sans-serif;font-size:2.5rem;font-weight:800;
+      background:linear-gradient(135deg,var(--red),var(--gold));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      line-height:1;
+    }
+    .ace-stat-label{color:var(--muted);font-size:.85rem;margin-top:6px}
+
+    /* ── HOURS ── */
+    #hours{padding:80px 5%;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+    .hours-inner{max-width:900px;margin:0 auto;text-align:center}
+    .hours-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:40px}
+    .hours-card{
+      background:var(--bg);border:1px solid var(--border);
+      border-radius:14px;padding:22px 16px;
+      transition:all .3s;
+    }
+    .hours-card:hover{border-color:var(--gold);transform:translateY(-4px)}
+    .hours-day{font-weight:700;font-size:.95rem;margin-bottom:8px;color:var(--gold)}
+    .hours-time{color:var(--muted);font-size:.9rem}
+
+    /* ── INQUIRY ── */
+    #inquiry{padding:100px 5%}
+    .inquiry-inner{max-width:1000px;margin:0 auto}
+    .inquiry-wrap{
+      display:grid;grid-template-columns:1fr 1.4fr;
+      gap:50px;align-items:start;
+    }
+    .inquiry-info h2{font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:800;margin-bottom:14px;line-height:1.2}
+    .inquiry-info p{color:var(--muted);font-size:.95rem;line-height:1.75;margin-bottom:24px}
+    .contact-detail{
+      display:flex;align-items:center;gap:12px;
+      padding:14px 18px;background:var(--surface);
+      border:1px solid var(--border);border-radius:12px;
+      margin-bottom:12px;transition:all .3s;
+    }
+    .contact-detail:hover{border-color:rgba(230,60,47,.3);transform:translateX(4px)}
+    .contact-detail-icon{font-size:1.2rem;flex-shrink:0}
+    .contact-detail-text{font-size:.9rem}
+    .contact-detail-text strong{display:block;font-size:.78rem;color:var(--muted);font-weight:500;margin-bottom:2px}
+    /* Form */
+    .inquiry-form{
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:20px;padding:36px;
+    }
+    .inquiry-form h3{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;margin-bottom:24px}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+    .form-group label{font-size:.82rem;font-weight:600;color:var(--muted)}
+    .form-group input,.form-group select,.form-group textarea{
+      padding:12px 14px;background:var(--bg);
+      border:1px solid var(--border);border-radius:10px;
+      color:var(--text);font-size:.9rem;font-family:'Inter',sans-serif;
+      outline:none;transition:border-color .2s;
+    }
+    .form-group input:focus,.form-group select,.form-group textarea:focus{border-color:var(--red)}
+    .form-group select{cursor:pointer}
+    .form-group select option{background:var(--surface)}
+    .form-group textarea{height:100px;resize:none}
+    .form-submit{
+      width:100%;padding:14px;
+      background:linear-gradient(135deg,var(--red),#c0392b);
+      color:white;font-weight:700;font-size:1rem;
+      border:none;border-radius:10px;cursor:pointer;
+      font-family:'Inter',sans-serif;transition:all .3s;
+      margin-top:6px;
+    }
+    .form-submit:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(230,60,47,.35)}
+
+    /* ── FOOTER ── */
+    footer{
+      background:var(--surface);border-top:1px solid var(--border);
+      padding:40px 5%;text-align:center;
+    }
+    .footer-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+    .footer-copy{color:var(--muted);font-size:.85rem}
+    .footer-note{color:var(--muted);font-size:.82rem}
+    .footer-note span{color:var(--gold)}
+
+    /* ── SCROLL REVEAL ── */
+    .reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+    .reveal-d1{transition-delay:.1s}
+    .reveal-d2{transition-delay:.2s}
+    .reveal-d3{transition-delay:.3s}
+    .reveal-d4{transition-delay:.4s}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:900px){
+      .hero-inner{grid-template-columns:1fr}
+      .hero-visual{display:none}
+      .activities-grid{grid-template-columns:repeat(2,1fr)}
+      .ace-grid{grid-template-columns:1fr}
+      .hours-grid{grid-template-columns:repeat(2,1fr)}
+      .inquiry-wrap{grid-template-columns:1fr}
+      .form-row{grid-template-columns:1fr}
+      .nav-links{display:none}
+      .footer-inner{flex-direction:column;text-align:center}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-icon">🏆</div>
+    <div class="nav-logo-text">World of <span>Sports Fun</span></div>
+  </div>
+  <div class="nav-links">
+    <a href="#activities">Activities</a>
+    <a href="#ace">Meet Ace</a>
+    <a href="#hours">Hours</a>
+    <a href="#inquiry">Book Event</a>
+  </div>
+  <a href="tel:4345722695" class="nav-call">📞 (434) 572-2695</a>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-tag"><span class="dot"></span> AI-Powered Reception — 24/7</div>
+      <h1 class="hero-title">
+        Meet <span class="accent">Ace</span> — Your<br>Sports Fun Guide
+      </h1>
+      <p class="hero-subtitle">
+        Call anytime and Ace answers instantly. Get <strong>hours, activity info, pricing</strong>, and book your <strong>party or event</strong> — all through a natural voice conversation.
+      </p>
+      <div class="hero-btns">
+        <a href="#inquiry" class="btn-red">🎳 Book an Event</a>
+        <a href="#ace" class="btn-outline">Meet Ace ↓</a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-card">
+        <div class="hero-card-header">
+          <div class="ace-avatar">🏆</div>
+          <div class="ace-info">
+            <div class="ace-name">Ace — World of Sports</div>
+            <div class="ace-status">Online · Ready to Help</div>
+          </div>
+        </div>
+        <div class="hero-card-body">
+          <div class="chat-bubble ace">
+            <div class="bubble-name">ACE</div>
+            Hey there! Welcome to World of Sports Fun! I'm Ace, your guide to everything fun here. Are you looking to plan a party, check our hours, or learn about our activities?
+          </div>
+          <div class="chat-bubble user">
+            We'd love to book a birthday party for about 20 kids!
+          </div>
+          <div class="chat-bubble ace">
+            <div class="bubble-name">ACE</div>
+            Awesome — a birthday party for 20 kids sounds like an absolute blast! 🎉 We have bowling, laser tag, bumper cars, go-karts and more. Can I get your name and a preferred date?
+          </div>
+          <div class="typing"><span></span><span></span><span></span></div>
+        </div>
+      </div>
+      <div class="badge-float b1">🎳 Bowling · Laser Tag · Go-Karts</div>
+      <div class="badge-float b2">✅ Inquiry captured instantly</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITIES ── -->
+<section id="activities">
+  <div class="activities-inner">
+    <div class="section-label reveal">What's Here</div>
+    <h2 class="section-title reveal">8 Ways to Have <span>an Epic Time</span></h2>
+    <p class="section-desc reveal">From laser tag to axe throwing — there's something for everyone at World of Sports Fun in South Boston, VA.</p>
+    <div class="activities-grid">
+      <div class="activity-card reveal reveal-d1">
+        <span class="activity-icon">🎳</span>
+        <div class="activity-name">Bowling</div>
+        <div class="activity-desc">Open bowling lanes + pro shop for gear</div>
+      </div>
+      <div class="activity-card reveal reveal-d2">
+        <span class="activity-icon">🪓</span>
+        <div class="activity-name">Axe Throwing</div>
+        <div class="activity-desc">At JB's Axe & Tap House — food too!</div>
+      </div>
+      <div class="activity-card reveal reveal-d3">
+        <span class="activity-icon">🏎️</span>
+        <div class="activity-name">Indoor Go-Karts</div>
+        <div class="activity-desc">High-speed fun for all ages</div>
+      </div>
+      <div class="activity-card reveal reveal-d4">
+        <span class="activity-icon">🔫</span>
+        <div class="activity-name">Laser Tag</div>
+        <div class="activity-desc">Epic team battles in the arena</div>
+      </div>
+      <div class="activity-card reveal reveal-d1">
+        <span class="activity-icon">🕹️</span>
+        <div class="activity-name">Arcade Games</div>
+        <div class="activity-desc">Classic and modern arcade favorites</div>
+      </div>
+      <div class="activity-card reveal reveal-d2">
+        <span class="activity-icon">🚗</span>
+        <div class="activity-name">Bumper Cars</div>
+        <div class="activity-desc">Crash into the fun!</div>
+      </div>
+      <div class="activity-card reveal reveal-d3">
+        <span class="activity-icon">⛳</span>
+        <div class="activity-name">Golf Simulators</div>
+        <div class="activity-desc">Play famous courses indoors</div>
+      </div>
+      <div class="activity-card reveal reveal-d4">
+        <span class="activity-icon">🎬</span>
+        <div class="activity-name">Movie Theater</div>
+        <div class="activity-desc">Current releases on the big screen</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW ACE HELPS ── -->
+<section id="ace">
+  <div class="ace-inner">
+    <div class="section-label reveal">AI Voice Agent</div>
+    <h2 class="section-title reveal">Ace Handles Your <span>Calls 24/7</span></h2>
+    <p class="section-desc reveal">No hold music. No missed calls. Ace answers instantly, answers questions, and captures your event inquiry — day or night.</p>
+    <div class="ace-grid">
+      <div class="ace-features">
+        <div class="ace-feature reveal reveal-d1">
+          <div class="ace-feature-icon" style="background:rgba(230,60,47,.12)">📋</div>
+          <div>
+            <h3>Instant FAQ Answers</h3>
+            <p>Hours, location, activities, pricing, and policies — Ace knows it all and answers immediately without putting callers on hold.</p>
+          </div>
+        </div>
+        <div class="ace-feature reveal reveal-d2">
+          <div class="ace-feature-icon" style="background:rgba(245,166,35,.12)">🎉</div>
+          <div>
+            <h3>Event & Party Inquiry Capture</h3>
+            <p>Ace collects the caller's name, email, phone, event date, group size, and preferred activities — then logs it to a spreadsheet and emails the team instantly.</p>
+          </div>
+        </div>
+        <div class="ace-feature reveal reveal-d3">
+          <div class="ace-feature-icon" style="background:rgba(104,211,145,.12)">📊</div>
+          <div>
+            <h3>Automatic Lead Logging</h3>
+            <p>Every inquiry is saved to Google Sheets in real time. Call transcripts are logged automatically so nothing is ever lost.</p>
+          </div>
+        </div>
+        <div class="ace-feature reveal reveal-d4">
+          <div class="ace-feature-icon" style="background:rgba(99,149,237,.12)">🔔</div>
+          <div>
+            <h3>Instant Owner Notification</h3>
+            <p>The moment a lead is captured, an email notification goes out with full inquiry details so the team can follow up fast.</p>
+          </div>
+        </div>
+      </div>
+      <div class="ace-stats reveal">
+        <div class="ace-stat">
+          <div class="ace-stat-num">24/7</div>
+          <div class="ace-stat-label">Always Available</div>
+        </div>
+        <div class="ace-stat">
+          <div class="ace-stat-num">&lt;1s</div>
+          <div class="ace-stat-label">Answer Time</div>
+        </div>
+        <div class="ace-stat">
+          <div class="ace-stat-num">0</div>
+          <div class="ace-stat-label">Missed Inquiries</div>
+        </div>
+        <div class="ace-stat">
+          <div class="ace-stat-num">8+</div>
+          <div class="ace-stat-label">Activities Covered</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HOURS ── -->
+<section id="hours">
+  <div class="hours-inner">
+    <div class="section-label reveal" style="justify-content:center">Hours</div>
+    <h2 class="section-title reveal">We're Open <span>All Week</span></h2>
+    <p class="section-desc reveal" style="margin:0 auto 0">Come in for fun any day of the week. Ace is available 24/7 even when we're closed!</p>
+    <div class="hours-grid">
+      <div class="hours-card reveal reveal-d1">
+        <div class="hours-day">Mon – Thu</div>
+        <div class="hours-time">5:00 PM – 9:00 PM</div>
+      </div>
+      <div class="hours-card reveal reveal-d2">
+        <div class="hours-day">Friday</div>
+        <div class="hours-time">5:00 PM – 11:00 PM</div>
+      </div>
+      <div class="hours-card reveal reveal-d3">
+        <div class="hours-day">Saturday</div>
+        <div class="hours-time">12:00 PM – 11:00 PM</div>
+      </div>
+      <div class="hours-card reveal reveal-d4">
+        <div class="hours-day">Sunday</div>
+        <div class="hours-time">2:00 PM – 9:00 PM</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── INQUIRY ── -->
+<section id="inquiry">
+  <div class="inquiry-inner">
+    <div class="section-label reveal">Get In Touch</div>
+    <h2 class="section-title reveal">Plan Your <span>Next Event</span></h2>
+    <div class="inquiry-wrap">
+      <div class="reveal">
+        <p style="color:var(--muted);font-size:.95rem;line-height:1.75;margin-bottom:24px">
+          Fill out the form or just call — Ace will answer and collect your details automatically. Our event specialist will follow up within 24 hours.
+        </p>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">📞</div>
+          <div class="contact-detail-text">
+            <strong>Phone</strong>
+            <a href="tel:4345722695" style="color:var(--text)">(434) 572-2695</a>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">📍</div>
+          <div class="contact-detail-text">
+            <strong>Address</strong>
+            2030 Bill Tuck Hwy, South Boston, VA 24592
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">📧</div>
+          <div class="contact-detail-text">
+            <strong>Email</strong>
+            info@worldofsportsfun.com
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">🤖</div>
+          <div class="contact-detail-text">
+            <strong>AI Agent</strong>
+            Ace answers calls 24/7 — no wait times
+          </div>
+        </div>
+      </div>
+
+      <div class="inquiry-form reveal reveal-d1">
+        <h3>🎉 Event Inquiry</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Your Name *</label>
+            <input type="text" id="f-name" placeholder="John Smith" required>
+          </div>
+          <div class="form-group">
+            <label>Phone *</label>
+            <input type="tel" id="f-phone" placeholder="(555) 000-0000" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" id="f-email" placeholder="you@example.com" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Event Type</label>
+            <select id="f-event">
+              <option value="">Select type...</option>
+              <option>Birthday Party</option>
+              <option>Corporate Event</option>
+              <option>Private Party</option>
+              <option>Fundraiser</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Preferred Date</label>
+            <input type="date" id="f-date">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Group Size</label>
+            <input type="text" id="f-size" placeholder="e.g. 20 people">
+          </div>
+          <div class="form-group">
+            <label>Activities Interested In</label>
+            <input type="text" id="f-activities" placeholder="e.g. Bowling, Laser Tag">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Additional Notes</label>
+          <textarea id="f-notes" placeholder="Any special requests or questions..."></textarea>
+        </div>
+        <button class="form-submit" onclick="submitForm()">Send Event Inquiry 🏆</button>
+        <p id="form-msg" style="margin-top:12px;font-size:.85rem;color:var(--gold);display:none;text-align:center"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-copy">© 2026 World of Sports Fun · 2030 Bill Tuck Hwy, South Boston, VA 24592</div>
+    <div class="footer-note">AI Voice Agent <span>Ace</span> powered by Vapi + GPT-4o</div>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(e => e.forEach(x => { if(x.isIntersecting) x.target.classList.add('visible') }), {threshold:0.1});
+  reveals.forEach(el => io.observe(el));
+
+  // Nav scroll effect
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').style.padding = window.scrollY > 40 ? '12px 5%' : '16px 5%';
+  });
+
+  // Form submit (mailto fallback)
+  function submitForm() {
+    const name = document.getElementById('f-name').value;
+    const email = document.getElementById('f-email').value;
+    const phone = document.getElementById('f-phone').value;
+    const event = document.getElementById('f-event').value;
+    const date = document.getElementById('f-date').value;
+    const size = document.getElementById('f-size').value;
+    const activities = document.getElementById('f-activities').value;
+    const notes = document.getElementById('f-notes').value;
+
+    if (!name || !email || !phone) {
+      alert('Please fill in your name, email, and phone number.');
+      return;
+    }
+
+    const body = `New Event Inquiry from World of Sports Fun website:\n\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\nEvent Type: ${event}\nPreferred Date: ${date}\nGroup Size: ${size}\nActivities: ${activities}\nNotes: ${notes}`;
+    window.location.href = `mailto:bryanmcrey19@gmail.com?subject=Event Inquiry - ${name}&body=${encodeURIComponent(body)}`;
+
+    const msg = document.getElementById('form-msg');
+    msg.style.display = 'block';
+    msg.textContent = "✅ Opening your email client... We'll be in touch within 24 hours!";
+  }
+</script>
+</body>
+</html>
