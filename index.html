@@ -304,6 +304,30 @@
       .nav-links{display:none}
       .footer-inner{flex-direction:column;text-align:center}
     }
+
+    /* ── ACE FLOATING BUTTON ── */
+    #vapiFloat{
+      position:fixed;bottom:28px;right:28px;
+      width:62px;height:62px;border-radius:50%;
+      background:linear-gradient(135deg,var(--red),#c0392b);
+      border:none;cursor:pointer;
+      box-shadow:0 6px 24px rgba(230,60,47,0.5);
+      z-index:9999;transition:background .25s,transform .2s,box-shadow .2s;
+      display:flex;align-items:center;justify-content:center;
+    }
+    #vapiFloat:hover{transform:scale(1.1);box-shadow:0 10px 32px rgba(230,60,47,0.65)}
+    #vapiFloat svg{width:27px;height:27px;fill:white}
+    #vapiFloat.active{background:linear-gradient(135deg,var(--navy),#0f2347);box-shadow:0 6px 24px rgba(26,58,107,0.6)}
+    .ace-status{
+      position:fixed;bottom:104px;right:28px;
+      background:#1a2540;border-radius:12px;
+      padding:10px 16px;font-size:.82rem;color:var(--muted);
+      box-shadow:0 8px 32px rgba(0,0,0,.4);
+      display:none;align-items:center;gap:8px;z-index:9999;
+      border:1px solid var(--border);
+    }
+    .ace-status.show{display:flex}
+    .ace-status .dot{width:8px;height:8px;border-radius:50%;background:#4ade80}
   </style>
 </head>
 <body>
@@ -320,7 +344,7 @@
     <a href="#hours">Hours</a>
     <a href="#inquiry">Book Event</a>
   </div>
-  <a href="tel:09123456789" class="nav-call">📞 Call Ace</a>
+  <a href="#" class="nav-call" onclick="startCall();return false;">📞 Call Ace</a>
 </nav>
 
 <!-- ── HERO ── -->
@@ -336,7 +360,7 @@
         Call anytime and Ace answers instantly. Get <strong>hours, activity info, pricing</strong>, and book your <strong>party or event</strong> — all through a natural voice conversation.
       </p>
       <div class="hero-btns">
-        <a href="tel:09123456789" class="btn-red">📞 Call Ace Now</a>
+        <a href="#" class="btn-red" onclick="startCall();return false;">📞 Call Ace Now</a>
         <a href="#inquiry" class="btn-outline">🎳 Book an Event</a>
       </div>
     </div>
@@ -522,7 +546,7 @@
           <div class="contact-detail-icon">📞</div>
           <div class="contact-detail-text">
             <strong>Phone</strong>
-            <a href="tel:09123456789" style="color:var(--text)">Call Ace — Available 24/7</a>
+            <a href="#" onclick="startCall();return false;" style="color:var(--text)">Call Ace — Available 24/7</a>
           </div>
         </div>
         <div class="contact-detail">
@@ -645,5 +669,59 @@
     msg.textContent = "✅ Opening your email client... We'll be in touch within 24 hours!";
   }
 </script>
+
+  <!-- Floating Call Ace button -->
+  <div class="ace-status" id="aceStatus">
+    <div class="dot"></div>
+    <span id="aceStatusText">Ace is listening...</span>
+  </div>
+  <button id="vapiFloat" onclick="startCall()" title="Talk to Ace">
+    <svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>
+  </button>
+
+  <!-- Vapi Web SDK -->
+  <script>
+    const VAPI_PUBLIC_KEY = "bdb05aa4-9f37-4b0b-9774-c6ee21600545";
+    const ACE_ASSISTANT   = "a9c5ecab-3f1d-41a6-9e35-dc210a8ed7a3";
+
+    var vapiInstance = null;
+
+    (function (d, t) {
+      var g = document.createElement(t), s = d.getElementsByTagName(t)[0];
+      g.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+      g.defer = true; g.async = true;
+      s.parentNode.insertBefore(g, s);
+      g.onload = function () {
+        vapiInstance = window.vapiSDK.run({
+          apiKey:    VAPI_PUBLIC_KEY,
+          assistant: ACE_ASSISTANT,
+          config: { display: "none" }
+        });
+        vapiInstance.on("call-start", function () {
+          document.getElementById("vapiFloat").classList.add("active");
+          document.getElementById("aceStatusText").textContent = "Connected to Ace...";
+          document.getElementById("aceStatus").classList.add("show");
+        });
+        vapiInstance.on("speech-start", function () {
+          document.getElementById("aceStatusText").textContent = "Ace is speaking...";
+        });
+        vapiInstance.on("speech-end", function () {
+          document.getElementById("aceStatusText").textContent = "Ace is listening...";
+        });
+        vapiInstance.on("call-end", function () {
+          document.getElementById("vapiFloat").classList.remove("active");
+          document.getElementById("aceStatus").classList.remove("show");
+        });
+      };
+    })(document, "script");
+
+    function startCall() {
+      if (vapiInstance) {
+        vapiInstance.start(ACE_ASSISTANT);
+      } else {
+        alert("Ace is still loading, please wait a moment and try again.");
+      }
+    }
+  </script>
 </body>
 </html>
